@@ -111,7 +111,7 @@ udftools
 usb_modeswitch
 usbmuxd
 usbutils
-vim
+#vim
 virtualbox-guest-utils-nox
 vpnc
 wireless-regdb
@@ -121,5 +121,4 @@ wvdial
 xfsprogs
 xl2tpd
 zsh
-reflector
-dialog
+fefe-base
