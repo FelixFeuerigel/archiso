@@ -21,8 +21,10 @@ exec 2> >(tee "stderr.log")
 
 ### basic pre-install setup ###
 timedatectl set-ntp true
+loadkeys de-latin1
 
 pacman -Sy --noconfirm archlinux-keyring
+pacman -S --noconfirm --needed reflector dialog
 
 
 ### Get infomation from user ###
@@ -52,6 +54,21 @@ get_user_info
 set_up_pacman () {
     echo "Searching for pacman mirrors"
     reflector -a 48 -f 20 -l 30 --protocol https --sort rate --save /etc/pacman.d/mirrorlist
+
+    sed -i 's/^#ParallelDownloads/ParallelDownloads/' /etc/pacman.conf
+    
+    ## Add custom repo ##
+cat >> /etc/pacman.conf << EOF
+
+[$REPO_NAME]
+SigLevel = Optional TrustAll
+Server = $REPO_URL
+EOF
+
+    ## enable multilib repo ##
+    sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+
+    pacman -Sy
 }
 set_up_pacman
 
